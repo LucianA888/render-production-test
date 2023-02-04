@@ -4,20 +4,22 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-	"test": "echo \"Error: no test specified\" && exit 1",
-	"start": "node index.js",
-	"dev": "nodemon index.js",
-	"build:ui": "rm -rf build && cd ../phonebook-frontend && npm run build && cp -r build ../phonebook-backend",
-	"deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js",
+        "dev": "nodemon index.js",
+        "build:ui": "rm -rf build && cd ../phonebook-frontend && npm run build && cp -r build ../phonebook-backend",
+        "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
-	"nodemon": "^2.0.20"
+        "nodemon": "^2.0.20"
     },
     "dependencies": {
-	"cors": "^2.8.5",
-	"express": "^4.18.2",
-	"morgan": "^1.10.0"
+        "cors": "^2.8.5",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "mongoose": "^6.9.0",
+        "morgan": "^1.10.0"
     }
 }
