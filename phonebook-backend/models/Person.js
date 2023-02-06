@@ -1,29 +1,40 @@
-const mongoose = require('mongoose');
-const url = process.env.MONGODB_URI;
+const mongoose = require('mongoose')
+const url = process.env.MONGODB_URI
 
 // const url = `mongodb+srv://fullstack:${password}@cluster0.t9tjdq4.mongodb.net/phonebookApp?retryWrites=true&w=majority`;
 
-mongoose.set('strictQuery', false);
+mongoose.set('strictQuery', false)
 mongoose.connect(url)
-    .then(result => {
-	console.log('Connected to MongoDB');
-    }).catch((error) => {
-	console.log("Failed connecting to MongoDB:", error.message);
-    });
+  .then(() => {
+    console.log('Connected to MongoDB')
+  }).catch((error) => {
+    console.log('Failed connecting to MongoDB:', error.message)
+  })
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String
-});
-
-personSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-	returnedObject.id = returnedObject._id.toString();
-	delete returnedObject._id;
-	delete returnedObject.__v;
+  name: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  number: {
+    type: String,
+    minLength: 8,
+    required: true,
+    validate: function(str) {
+      return /^\d{2,3}-\d{1,}$/.test(str)
     }
+  }
 })
 
-const Person = mongoose.model('Person', personSchema);
+personSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
 
-module.exports = Person;
+const Person = mongoose.model('Person', personSchema)
+
+module.exports = Person

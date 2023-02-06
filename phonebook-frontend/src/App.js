@@ -24,6 +24,11 @@ const App = () => {
 	setTimeout(() => setNotification({message: null, error: false}), 5000);
     };
 
+    const clearInput = () => {
+	setNewName('');
+	setNewNumber('');
+    }
+
     const addEntry = (event) => {
         event.preventDefault();
 
@@ -41,12 +46,16 @@ const App = () => {
 		    .then(returnedPerson => {
 			setPersons(persons.map(person => (person.id === id) ? returnedPerson : person));
 			displayNotification({message: `Updated ${newName}'s number to "${newNumber}".`, error: false})
-			setNewName('');
-			setNewNumber('');
+			clearInput();
 		    })
-		    .catch(() => {
-			displayNotification({message: `${newName} doesn't exist on the server`, error: true});
-			setPersons(persons.filter(person => person.id !== id))});
+		    .catch(error => {
+			const validationError = error.response.data.error.toLowerCase().includes("validation");
+			if (validationError) {
+			    displayNotification({message: error.response.data.error, error: true});
+			} else {
+			    displayNotification({message: `${newName} doesn't exist on the server`, error: true});
+			    setPersons(persons.filter(person => person.id !== id))
+			}});
 	    };
 	    
 	} else {
@@ -56,8 +65,10 @@ const App = () => {
 		.then(returnedPerson => {
 		    setPersons(persons.concat(returnedPerson));
 		    displayNotification({message: `Added ${newName} to the phonebook.`, error: false})
-		    setNewName('');
-		    setNewNumber('');
+		    clearInput();
+		})
+		.catch(error => {
+		    displayNotification({message: error.response.data.error, error: true})
 		});
 	};
     };
